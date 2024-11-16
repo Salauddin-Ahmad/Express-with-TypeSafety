@@ -8,14 +8,19 @@ const app = (0, express_1.default)();
 // Middleware for parsing request bodies
 app.use(express_1.default.json());
 app.use(express_1.default.text());
+const logger = (req, res, next) => {
+    console.log(req.url, req.method, req.hostname);
+    next();
+};
 // GET route
-app.get('/', (req, res) => {
+app.get('/', logger, (req, res) => {
+    console.log(req.query);
+    // console.log(req.headers)
     res.send('Hello Devs Welcome to Node.js!');
-    console.log(req.headers);
 });
 // POST route
-app.post("/", (req, res) => {
-    console.log('Request received:', req.body);
+app.post("/", logger, (req, res) => {
+    console.log(req.body);
     res.send("Got data");
 });
 // Error handling middleware (optional)

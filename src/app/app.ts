@@ -1,3 +1,4 @@
+import { NextFunction } from './../../node_modules/@types/express-serve-static-core/index.d';
 import express, { Request, Response } from 'express';
 
 const app = express();
@@ -6,15 +7,21 @@ const app = express();
 app.use(express.json());
 app.use(express.text());
 
+const logger = (req: Request, res: Response, next: NextFunction) => {
+console.log(req.url, req.method, req.hostname)
+next()
+}
+
 // GET route
-app.get('/', (req: Request, res: Response) => {
+app.get('/', logger, (req: Request, res: Response) => {
+    console.log(req.query)
+    // console.log(req.headers)
     res.send('Hello Devs Welcome to Node.js!');
-    console.log(req.headers)
 });
 
 // POST route
-app.post("/", (req: Request, res: Response) => {
-    console.log('Request received:', req.body);
+app.post("/",logger, (req: Request, res: Response) => {
+    console.log(req.body);
     res.send("Got data");
 });
 
